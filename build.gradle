@@ -1,0 +1,45 @@
+import java.text.SimpleDateFormat
+
+plugins {
+    id 'java'
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+}
+
+group 'com.kral1k'
+version = project.krabot_version /*+ "-" + new SimpleDateFormat("yyyyMMddhhmm").format(new Date(System.currentTimeMillis()))*/
+archivesBaseName = "KraBot"
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://m2.dv8tion.net/releases"
+    }
+}
+
+dependencies {
+    implementation "net.dv8tion:JDA:${project.jda_version}"
+    implementation "ch.qos.logback:logback-classic:${project.logback_classic_version}"
+    implementation "com.sedmelluq:lavaplayer:${project.lava_player_version}"
+    implementation "com.google.cloud:google-cloud-texttospeech:${project.google_cloud_text_to_speech_version}"
+    implementation "com.google.auth:google-auth-library-oauth2-http:${project.google_auth_oauth2_http_version}"
+//    implementation("com.google.guava:guava:31.1-jre")
+//    implementation("com.google.code.gson:gson:2.9.0")
+}
+
+shadowJar {
+    mergeServiceFiles()
+    shadowJar.classifier ""
+    exclude "META-INF/INDEX.LIST", "META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA"
+}
+
+build {
+    dependsOn(shadowJar)
+}
+
+tasks.jar {
+    manifest.attributes("Main-Class": "com.kral1k.krabot.Main")
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
