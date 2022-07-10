@@ -6,9 +6,14 @@ public enum Directory {
     GUILDS("guilds"),
     LANGUAGES("lang");
 
-    public final String name;
+    private final String path;
 
-    Directory(String name) {
-        this.name = name;
+    Directory(String path) {
+        this.path = path;
+    }
+
+    @Override
+    public String toString() {
+        return path;
     }
 }

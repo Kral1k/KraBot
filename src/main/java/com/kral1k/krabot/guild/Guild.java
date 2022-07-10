@@ -103,7 +103,7 @@ public class Guild {
     }
 
     public Path getDirectory(GuildDirectory directory) {
-        Path path = this.path.resolve(directory.name);
+        Path path = this.path.resolve(directory.toString());
         return Bot.initializePath(path);
     }
 }

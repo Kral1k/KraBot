@@ -15,7 +15,6 @@ import java.util.List;
 public class Member extends CommandSource {
     private final Bot bot;
     private net.dv8tion.jda.api.entities.Member jdaMember;
-
     private final MemberData data;
     private final User user;
 
@@ -67,10 +66,6 @@ public class Member extends CommandSource {
 
     public String getId() {
         return jdaMember.getId();
-    }
-
-    public String getUserAsTag() {
-        return user.getAsTag();
     }
 
     public List<Role> getRoles() {

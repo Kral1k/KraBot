@@ -15,7 +15,7 @@ public class GsonHelper {
     public static <T> T deserialize(Reader reader, Class<T> tClass) {
         return GSON.fromJson(reader, tClass);
     }
-    public static JsonObject fromJson(InputStreamReader reader) {
+    public static JsonObject fromJson(Reader reader) {
         return GSON.fromJson(reader, JsonObject.class);
     }
 }

@@ -4,7 +4,6 @@ import com.kral1k.krabot.button.ButtonManager;
 import com.kral1k.krabot.command.CommandManager;
 import com.kral1k.krabot.guild.Guild;
 import com.kral1k.krabot.guild.GuildCache;
-import com.kral1k.krabot.guild.GuildData;
 import com.kral1k.krabot.modal.ModalManager;
 import com.kral1k.krabot.user.User;
 import com.kral1k.krabot.user.UserCache;
@@ -45,6 +44,8 @@ public class Bot {
         jdaBuilder.setActivity(Activity.of(properties.activityType, properties.activityName, properties.activityUrl));
         jdaBuilder.addEventListeners(new JdaEvents(this));
         this.jda = jdaBuilder.build();
+
+
     }
     @NotNull
     public User getUser(@NotNull net.dv8tion.jda.api.entities.User jdaUser) {
@@ -103,12 +104,12 @@ public class Bot {
     }
 
     public static Path getDirectory(Directory directory) {
-        Path path = DIRECTORY.resolve(directory.name);
+        Path path = DIRECTORY.resolve(directory.toString());
         return initializePath(path);
     }
 
     public static Path getGuildDirectory(String guildId, GuildDirectory directory) {
-        Path path = DIRECTORY.resolve(Directory.GUILDS.name + "/" + guildId + "/" + directory.name);
+        Path path = DIRECTORY.resolve(Directory.GUILDS + "/" + guildId + "/" + directory);
         return initializePath(path);
     }
 

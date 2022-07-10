@@ -6,9 +6,14 @@ public enum GuildDirectory {
     GAMES("games"),
     GAME_PUZZLE("games/puzzle");
 
-    public final String name;
+    private final String path;
 
-    GuildDirectory(String name) {
-        this.name = name;
+    GuildDirectory(String path) {
+        this.path = path;
+    }
+
+    @Override
+    public String toString() {
+        return path;
     }
 }

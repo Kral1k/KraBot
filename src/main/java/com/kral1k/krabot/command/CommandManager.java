@@ -28,6 +28,8 @@ public class CommandManager  {
         SkipCommand.register(dispatcher);
         StopCommand.register(dispatcher);
         PauseCommand.register(dispatcher);
+        PlayPlayList.register(dispatcher);
+        SplayPlayList.register(dispatcher);
 
         GameCommand.register(dispatcher);
         MiniGameCommand.register(dispatcher);

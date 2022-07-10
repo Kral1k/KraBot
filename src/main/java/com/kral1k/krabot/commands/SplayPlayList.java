@@ -22,9 +22,9 @@ import java.util.concurrent.TimeUnit;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
-public class SplayCommand {
+public class SplayPlayList {
     public static void register(CommandDispatcher<GuildCommandInteraction> dispatcher) {
-        dispatcher.register("splay", "splay").addOption(new OptionData(STRING, "name", "Название трека", true)).permission(source -> {
+        dispatcher.register("splplay", "splplay").addOption(new OptionData(STRING, "name", "Название трека", true)).permission(source -> {
             return source.hasPermission(PermissionRole.DJ);
         }).executor(interaction -> {
             String name = interaction.getOption("name").getAsString();
@@ -33,7 +33,7 @@ public class SplayCommand {
             interaction.deferReply().queue();
             InteractionHook hook = interaction.getHook();
 
-            YouTubeSearch.newRequest(key, name).setType(YouTubeSearch.Type.VIDEO).setRegionCode("UA").sendAsync((statusCode, body) -> {
+            YouTubeSearch.newRequest(key, name).setType(YouTubeSearch.Type.PLAYLIST).setRegionCode("UA").sendAsync((statusCode, body) -> {
                 if (statusCode != 200) hook.sendMessage(Text.translatable("api.error")).queue();
                 else if (body.getItems().isEmpty()) hook.sendMessage(Text.translatable("notFound")).queue();
                 else {
@@ -41,9 +41,9 @@ public class SplayCommand {
                     StringJoiner stringJoiner = new StringJoiner("\n");
                     for (int i = 0; i < Math.min(5, body.getItems().size()); i++) {
                         YouTubeSearchResponse.Body.Item item = body.getItem(i);
-                        String videoId = item.getId().getVideoId();
-                        String title =  item.getSnippet().getTitle();
-                        videoIdButtons.add(SplayButton.create((i+1) + ". ▶", ButtonStyle.PRIMARY, new Perms(PermissionRole.DJ), videoId));
+                        String playlistId = item.getId().getPlaylistId();
+                        String title = item.getSnippet().getTitle();
+                        videoIdButtons.add(SplayPlayListButton.create((i+1) + ". ▶", ButtonStyle.PRIMARY, new Perms(PermissionRole.DJ), playlistId));
                         stringJoiner.add("**" + (i+1) + ")** " + title);
                     }
                     ActionRow videoIdAction = ActionRow.of(videoIdButtons);

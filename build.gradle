@@ -14,7 +14,9 @@ repositories {
     maven {
         url "https://m2.dv8tion.net/releases"
     }
+    maven { url 'https://jitpack.io' }
 }
+
 
 dependencies {
     implementation "net.dv8tion:JDA:${project.jda_version}"

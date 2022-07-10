@@ -1,8 +1,8 @@
 package com.kral1k.krabot.permission;
 
 public enum PermissionRole {
-    DJ("859062414180089896"),
-    DEVELOPER("875511344646995988");
+    DJ("971668959805988875"),
+    DEVELOPER("971664669330788403");
 
     private final String id;
 

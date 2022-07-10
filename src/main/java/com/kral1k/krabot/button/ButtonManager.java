@@ -43,6 +43,8 @@ public class ButtonManager {
         AddAnswerBuilderButton.register(dispatcher);
         EditAnswerBuilderButton.register(dispatcher);
         SaveAnswerBuilderButton.register(dispatcher);
+
+        SplayPlayListButton.register(dispatcher);
     }
 
     public void execute(String id, GuildButtonInteraction interaction) {

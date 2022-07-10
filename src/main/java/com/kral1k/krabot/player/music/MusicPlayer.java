@@ -27,7 +27,7 @@ public class MusicPlayer extends BasePlayer {
         this.sendHandler = new MusicSendHandler(this.audioPlayer);
         this.eventAdapter = new MusicEventAdapter(this);
         this.audioPlayer.addListener(this.eventAdapter);
-        this.audioPlayer.setVolume(35);
+        this.audioPlayer.setVolume(50);
         guild.getAudioManager().setSendingHandler(this.sendHandler);
     }
 
