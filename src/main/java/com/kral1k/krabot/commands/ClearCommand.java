@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ClearCommand {
     public static void register(CommandDispatcher<GuildCommandInteraction> dispatcher) {
-        dispatcher.register("clear", "Очистка чата.").permission(source -> {
+        dispatcher.register("clear", "Очистка чата.").predicate(source -> {
             return source.hasPermission(Permission.MESSAGE_MANAGE);
         }).addOption(new OptionData(OptionType.INTEGER, "amount", "Сколько сообщений необходимо удалить? (по умолчанию 10)")).executor(interaction -> {
             OptionMapping amountOption = interaction.getOption("amount");

@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
-public class PlayPlayList {
+public class PlayPlayListCommand {
     public static void register(CommandDispatcher<GuildCommandInteraction> dispatcher) {
         dispatcher.register("plplay", "play play list").addOption(new OptionData(STRING, "url", "Название трека или url", true)).executor(interaction -> {
             AudioChannel audioChannel = interaction.getMember().getVoiceChannel();

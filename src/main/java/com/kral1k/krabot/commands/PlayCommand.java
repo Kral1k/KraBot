@@ -23,7 +23,7 @@ import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 public class PlayCommand {
     public static void register(CommandDispatcher<GuildCommandInteraction> dispatcher) {
-        dispatcher.register("play", "play music").addOption(new OptionData(STRING, "url", "Название трека или url", true)).permission(source -> {
+        dispatcher.register("play", "play music").addOption(new OptionData(STRING, "url", "Название трека или url", true)).predicate(source -> {
             return source.hasPermission(PermissionRole.DJ);
         }).executor(interaction -> {
             AudioChannel audioChannel = interaction.getMember().getVoiceChannel();

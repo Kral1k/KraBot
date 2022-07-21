@@ -1,7 +1,7 @@
 package com.kral1k.krabot.permission;
 
+import com.kral1k.krabot.guild.member.Member;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Member;
 
 public class Perms {
     private final PermissionType type;
@@ -38,11 +38,11 @@ public class Perms {
         return userId;
     }
 
-    public boolean has(Member jdaMember) {
+    public boolean has(Member member) {
         return switch (type) {
-            case ROLE -> jdaMember.getRoles().stream().anyMatch(role1 -> role1.getId().equals(role.getId()));
-            case USER -> jdaMember.getId().equals(userId);
-            case DS -> jdaMember.hasPermission(perm);
+            case ROLE -> member.hasPermission(role);
+            case USER -> member.getId().equals(userId);
+            case DS -> member.hasPermission(perm);
         };
     }
 }

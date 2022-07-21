@@ -1,6 +1,8 @@
 package com.kral1k.krabot.command;
 
-public class CommandException extends Exception {
+import com.kral1k.krabot.utils.ExecutionException;
+
+public class CommandException extends ExecutionException {
 
     public CommandException(String message) {
         super(message);

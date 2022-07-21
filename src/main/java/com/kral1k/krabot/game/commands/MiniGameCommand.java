@@ -47,6 +47,13 @@ public class MiniGameCommand {
             } catch (IllegalArgumentException | GameNotFoundException e) {
                 interaction.reply("Игра не найдена!").setEphemeral(true).queue();
             }
+        })).addSubCommand(CommandManager.subCommand("unload", "Unload MiniGame").executor(interaction -> {
+            try {
+                interaction.getGuild().getGameManager().unloadMiniGame(interaction.getMemberId());
+                interaction.reply("Игра выгружена").setEphemeral(true).queue();
+            } catch (GameNotFoundException exception) {
+                interaction.reply("Игра не запущена!").setEphemeral(true).queue();
+            }
         })).addSubCommandGroup(CommandManager.subCommandGroup("puzzle", "puzzle").addSubcommand(CommandManager.subCommand("load", "load").addOption(new OptionData(OptionType.STRING, "name", "name", true)).executor(interaction -> {
             String name = interaction.getOption("name").getAsString();
             GameManager gameManager = interaction.getGuild().getGameManager();
@@ -57,9 +64,9 @@ public class MiniGameCommand {
             } catch (GameException e) {
                 interaction.reply(e.getMessage()).setEphemeral(true).queue();
             }
-        })).addSubcommand(CommandManager.subCommand("createpack", "Create new pack").permission(source -> source.hasPermission(PermissionRole.DJ)).executor(interaction -> {
+        })).addSubcommand(CommandManager.subCommand("createpack", "Create new pack").predicate(source -> source.hasPermission(PermissionRole.DJ)).executor(interaction -> {
             interaction.replyModal(PuzzlePackModal.create()).queue();
-        })).addSubcommand(CommandManager.subCommand("createreiddle", "Create Riddle").permission(source -> source.hasPermission(PermissionRole.DEVELOPER)).executor(interaction -> {
+        })).addSubcommand(CommandManager.subCommand("createreiddle", "Create Riddle").predicate(source -> source.hasPermission(PermissionRole.DEVELOPER)).executor(interaction -> {
             if (PuzzlePackBuilderManager.contains(interaction.getMemberId()))
                 interaction.reply("Редактор уже открыт!");
             else

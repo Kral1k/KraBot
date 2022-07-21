@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TranslatableText {
-    private static final Pattern ARG_FORMAT = Pattern.compile("%([o%])([1-9])?");
+    private static final Pattern ARG_FORMAT = Pattern.compile("%([s%])([1-9])?");
     private final String key;
     private final Object[] objects;
 

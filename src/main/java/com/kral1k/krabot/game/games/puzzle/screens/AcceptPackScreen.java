@@ -23,7 +23,7 @@ public class AcceptPackScreen implements Screen {
     public String getContent() {
         StringJoiner stringJoiner = new StringJoiner("\n");
         stringJoiner.add("Запрос на загрузку пака \"" + pack.getName() + "\"");
-        if (pack.getDescription().isEmpty()) stringJoiner.add(pack.getDescription());
+        if (!pack.getDescription().isEmpty()) stringJoiner.add(pack.getDescription());
         stringJoiner.add("Загрузить?");
         return stringJoiner.toString();
     }

@@ -1,6 +1,7 @@
 package com.kral1k.krabot.buttons;
 
 import com.google.gson.Gson;
+import com.kral1k.krabot.Main;
 import com.kral1k.krabot.button.ButtonData;
 import com.kral1k.krabot.button.ButtonDispatcher;
 import com.kral1k.krabot.button.GuildButtonInteraction;
@@ -13,6 +14,7 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle;
 
 import java.awt.*;
+import java.io.InputStream;
 
 public class GttsSampleButton {
     public static void register(ButtonDispatcher<GuildButtonInteraction> dispatcher) {
@@ -23,10 +25,10 @@ public class GttsSampleButton {
                 return;
             }
             interaction.getGuild().getAudioManager().openAudioConnection(audioChannel);
-            GoogleTextToSpeech gTts = interaction.getGuild().getGTts();
+            GoogleTextToSpeech googleTextToSpeech = interaction.getGuild().getGTts();
             Data data = Data.from(interaction.getComponentId());
 
-            if (gTts == null) {
+            if (googleTextToSpeech == null) {
                 EmbedBuilder embedBuilder = new EmbedBuilder();
                 embedBuilder.setTitle("Error");
                 embedBuilder.setColor(Color.RED);
@@ -35,18 +37,17 @@ public class GttsSampleButton {
             }
 
             interaction.deferEdit().queue();
-
-            gTts.sample("./" + data.name + ".mp3", aBoolean -> {
-                EmbedBuilder embedBuilder = new EmbedBuilder();
-                if (aBoolean) {
-                    embedBuilder.setTitle("Воспроизвожу " + data.name);
-                    embedBuilder.setColor(Color.GREEN);
-                }else {
-                    embedBuilder.setTitle("Error");
-                    embedBuilder.setColor(Color.RED);
-                }
-                interaction.getHook().editOriginalEmbeds(embedBuilder.build()).queue();
-            });
+            EmbedBuilder embedBuilder = new EmbedBuilder();
+            InputStream inputStream = Main.class.getResourceAsStream("/gtts/" + data.name + ".mp3");
+            if (inputStream == null) {
+                embedBuilder.setTitle("Error");
+                embedBuilder.setColor(Color.RED);
+            } else {
+                embedBuilder.setTitle("Воспроизвожу " + data.name);
+                embedBuilder.setColor(Color.GREEN);
+                googleTextToSpeech.sample(inputStream);
+            }
+            interaction.getHook().editOriginalEmbeds(embedBuilder.build()).queue();
         });
     }
 

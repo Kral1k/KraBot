@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 public class GTtsCommand {
     public static void register(CommandDispatcher<GuildCommandInteraction> dispatcher) {
-        dispatcher.register("gtts", "google-text-to-speech").addOption(new OptionData(OptionType.STRING, "message", "Ваше сообщение", true)).permission(source -> {
+        dispatcher.register("gtts", "google-text-to-speech").addOption(new OptionData(OptionType.STRING, "message", "Ваше сообщение", true)).predicate(source -> {
             return source.hasPermission(PermissionRole.DJ);
         }).executor(interaction -> {
             String message = interaction.getOption("message").getAsString();

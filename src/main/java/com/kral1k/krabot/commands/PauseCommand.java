@@ -8,7 +8,7 @@ import com.kral1k.krabot.player.music.MusicPlayer;
 
 public class PauseCommand {
     public static void register(CommandDispatcher<GuildCommandInteraction> dispatcher) {
-        dispatcher.register("pause", "pause").permission(source -> source.hasPermission(PermissionRole.DJ)).executor(interaction -> {
+        dispatcher.register("pause", "pause").predicate(source -> source.hasPermission(PermissionRole.DJ)).executor(interaction -> {
             MusicPlayer player = interaction.getGuild().getMusicPlayer();
             boolean pause = !player.audioPlayer.isPaused();
             player.audioPlayer.setPaused(pause);

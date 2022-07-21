@@ -1,6 +1,7 @@
 package com.kral1k.krabot.command;
 
 import com.kral1k.krabot.Bot;
+import com.kral1k.krabot.button.Source;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public abstract class CommandInteraction {
@@ -16,7 +17,7 @@ public abstract class CommandInteraction {
         return bot;
     }
 
-    public abstract CommandSource getSource();
+    public abstract Source getSource();
 
     public String getSubcommand() {
         return event.getSubcommandName();

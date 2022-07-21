@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 public class PlayerCommand {
     public static void register(CommandDispatcher<GuildCommandInteraction> dispatcher) {
-        dispatcher.register("player", "Проигрыватель").permission(source -> {
+        dispatcher.register("player", "Проигрыватель").predicate(source -> {
             return source.hasPermission(PermissionRole.DJ);
         }).addSubCommand(CommandManager.subCommand("volume", "Громкость воспроизедения.").addOption(new OptionData(OptionType.INTEGER, "amount", "Громкость", true)).executor(interaction -> {
             executeVolume(interaction);

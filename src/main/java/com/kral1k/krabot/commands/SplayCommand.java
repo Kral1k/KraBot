@@ -24,7 +24,7 @@ import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 public class SplayCommand {
     public static void register(CommandDispatcher<GuildCommandInteraction> dispatcher) {
-        dispatcher.register("splay", "splay").addOption(new OptionData(STRING, "name", "Название трека", true)).permission(source -> {
+        dispatcher.register("splay", "splay").addOption(new OptionData(STRING, "name", "Название трека", true)).predicate(source -> {
             return source.hasPermission(PermissionRole.DJ);
         }).executor(interaction -> {
             String name = interaction.getOption("name").getAsString();
@@ -43,7 +43,7 @@ public class SplayCommand {
                         YouTubeSearchResponse.Body.Item item = body.getItem(i);
                         String videoId = item.getId().getVideoId();
                         String title =  item.getSnippet().getTitle();
-                        videoIdButtons.add(SplayButton.create((i+1) + ". ▶", ButtonStyle.PRIMARY, new Perms(PermissionRole.DJ), videoId));
+                        videoIdButtons.add(SplayButton.create((i+1) + " ▶", ButtonStyle.PRIMARY, new Perms(PermissionRole.DJ), videoId));
                         stringJoiner.add("**" + (i+1) + ")** " + title);
                     }
                     ActionRow videoIdAction = ActionRow.of(videoIdButtons);

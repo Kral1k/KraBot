@@ -15,12 +15,13 @@ public class WikiCommand {
 
     public static void register(CommandDispatcher<GuildCommandInteraction> dispatcher) {
         dispatcher.register("wiki", "wikipedia").addOption(new OptionData(OptionType.STRING, "title", "title", true)).executor(interaction -> {
+            String title = interaction.getOption("title").getAsString();
             interaction.deferReply().queue();
             InteractionHook hook = interaction.getHook();
-            Wiki.request(interaction.getOption("title").getAsString(), (statusCode, data) -> {
+            Wiki.request(title, (statusCode, data) -> {
                 if (statusCode != 200) {
                     String message = Text.translatable(statusCode == 404 ? "notFound" : "api.error");
-                    hook.sendMessage(message).delay(6, TimeUnit.SECONDS).flatMap(Message::delete).queue(null, throwable -> {});
+                    hook.sendMessage(message).delay(6, TimeUnit.SECONDS).flatMap(Message::delete).queue(null, error -> {});
                 } else hook.sendMessage(data.extract).queue();
             });
         });

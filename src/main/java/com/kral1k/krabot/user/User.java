@@ -1,17 +1,19 @@
 package com.kral1k.krabot.user;
 
 import com.kral1k.krabot.Bot;
-import com.kral1k.krabot.command.CommandSource;
+import com.kral1k.krabot.button.Source;
+import com.kral1k.krabot.guild.member.MemberData;
+import com.kral1k.krabot.utils.jsonconfig.JsonConfigSaver;
 
-public class User extends CommandSource {
+public class User extends Source {
     private final Bot bot;
     private net.dv8tion.jda.api.entities.User jdaUser;
-    private final UserData data;
+    private final JsonConfigSaver<UserData> dataSaver;
 
-    public User(Bot bot, net.dv8tion.jda.api.entities.User jdaUser, UserData data) {
+    public User(Bot bot, net.dv8tion.jda.api.entities.User jdaUser, JsonConfigSaver<UserData> dataSaver) {
         this.bot = bot;
         this.jdaUser = jdaUser;
-        this.data = data;
+        this.dataSaver = dataSaver;
     }
 
     public Bot getBot() {
@@ -26,8 +28,16 @@ public class User extends CommandSource {
         return jdaUser;
     }
 
+    public JsonConfigSaver<UserData> getDataSaver() {
+        return dataSaver;
+    }
+
+    public void saveData() {
+        dataSaver.save();
+    }
+
     public UserData getData() {
-        return data;
+        return dataSaver.get();
     }
 
     public String getId() {
@@ -40,5 +50,10 @@ public class User extends CommandSource {
 
     public String getAsTag() {
         return jdaUser.getAsTag();
+    }
+
+    @Override
+    public boolean has(String userId) {
+        return jdaUser.getId().equals(userId);
     }
 }

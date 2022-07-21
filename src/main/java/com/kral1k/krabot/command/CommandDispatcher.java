@@ -1,5 +1,7 @@
 package com.kral1k.krabot.command;
 
+import com.kral1k.krabot.utils.ExecutionException;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +14,7 @@ public class CommandDispatcher<T extends CommandInteraction> {
         return command;
     }
 
-    protected void execute(String name, T interaction) throws CommandException {
+    protected void execute(String name, T interaction) throws ExecutionException {
         Command<T> command = commandMap.get(name);
         if (command == null) throw new CommandNotFoundException();
         command.execute(interaction);

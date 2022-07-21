@@ -1,23 +1,26 @@
 package com.kral1k.krabot.command;
 
+import com.kral1k.krabot.button.Source;
+import com.kral1k.krabot.utils.ExecutionException;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandGroupData;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public class SubCommandGroup<T extends CommandInteraction> {
     private final String name;
     private final String description;
     private final Map<String, SubCommand<T>> subCommandMap = new HashMap<>();
-    private CommandPermission<CommandSource> permission = source -> true;
+    private Predicate<Source> predicate = source -> true;
 
     public SubCommandGroup(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
-    public SubCommandGroup<T> permission(CommandPermission<CommandSource> permission) {
-        this.permission = permission;
+    public SubCommandGroup<T> predicate(Predicate<Source> predicate) {
+        this.predicate = predicate;
         return this;
     }
 
@@ -26,8 +29,8 @@ public class SubCommandGroup<T extends CommandInteraction> {
         return this;
     }
 
-    protected void execute(T interaction) throws CommandException {
-        if (!permission.accept(interaction.getSource())) throw new CommandPermissionException();
+    protected void execute(T interaction) throws ExecutionException {
+        if (!predicate.test(interaction.getSource())) throw new CommandPermissionException();
         subCommandMap.get(interaction.getSubcommand()).execute(interaction);
     }
 

@@ -1,10 +1,12 @@
 package com.kral1k.krabot.command;
 
 import com.kral1k.krabot.Bot;
+import com.kral1k.krabot.button.Source;
 import com.kral1k.krabot.guild.Guild;
 import com.kral1k.krabot.guild.member.Member;
 import com.kral1k.krabot.language.Text;
 import com.kral1k.krabot.user.User;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -65,6 +67,10 @@ public class GuildCommandInteraction extends CommandInteraction {
         return event;
     }
 
+    public MessageChannel getChannel() {
+        return event.getChannel();
+    }
+
     public OptionMapping getOption(@Nonnull String name) {
         return event.getOption(name);
     }
@@ -106,7 +112,7 @@ public class GuildCommandInteraction extends CommandInteraction {
     }
 
     @Override
-    public CommandSource getSource() {
+    public Source getSource() {
         return member;
     }
 }

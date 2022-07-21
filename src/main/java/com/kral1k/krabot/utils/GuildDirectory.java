@@ -1,7 +1,7 @@
 package com.kral1k.krabot.utils;
 
 public enum GuildDirectory {
-    ROOT("."),
+    ROOT(""),
     MEMBERDATA("memberdata"),
     GAMES("games"),
     GAME_PUZZLE("games/puzzle");

@@ -21,4 +21,8 @@ public class MemberCache {
     public void put(Member member) {
         cache.put(member.getId(), member);
     }
+
+    public Member remove(String memberId) {
+        return cache.asMap().remove(memberId);
+    }
 }

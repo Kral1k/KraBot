@@ -15,6 +15,7 @@ import net.dv8tion.jda.api.requests.restaction.interactions.MessageEditCallbackA
 import net.dv8tion.jda.api.requests.restaction.interactions.ModalCallbackAction;
 import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 
@@ -89,6 +90,8 @@ public class GuildButtonInteraction {
         return event.isAcknowledged();
     }
 
+    @Nonnull
+    @CheckReturnValue
     public ReplyCallbackAction reply(String message) {
         return event.reply(message);
     }

@@ -1,5 +1,6 @@
 package com.kral1k.krabot.command;
 
+import com.kral1k.krabot.button.test.SplayPlayListCommand2;
 import com.kral1k.krabot.commands.*;
 import com.kral1k.krabot.game.commands.GameCommand;
 import com.kral1k.krabot.game.commands.MiniGameCommand;
@@ -28,8 +29,8 @@ public class CommandManager  {
         SkipCommand.register(dispatcher);
         StopCommand.register(dispatcher);
         PauseCommand.register(dispatcher);
-        PlayPlayList.register(dispatcher);
-        SplayPlayList.register(dispatcher);
+        PlayPlayListCommand.register(dispatcher);
+        SplayPlayListCommand.register(dispatcher);
 
         GameCommand.register(dispatcher);
         MiniGameCommand.register(dispatcher);

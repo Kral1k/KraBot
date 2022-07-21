@@ -3,6 +3,7 @@ package com.kral1k.krabot.user;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.kral1k.krabot.guild.Guild;
+import com.kral1k.krabot.guild.member.Member;
 import org.jetbrains.annotations.Nullable;
 
 public class UserCache {
@@ -19,5 +20,9 @@ public class UserCache {
 
     public void put(User user) {
         cache.put(user.getId(), user);
+    }
+
+    public User remove(String userId) {
+        return cache.asMap().remove(userId);
     }
 }

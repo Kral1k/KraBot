@@ -26,6 +26,13 @@ public class GameManager {
         return miniGame;
     }
 
+    public void unloadMiniGame(String memberId) throws GameNotFoundException  {
+        MiniGame miniGame = miniGameMap.get(memberId);
+        if (miniGame == null) throw new GameNotFoundException();
+        miniGame.stop();
+        miniGameMap.remove(memberId);
+    }
+
     public <T extends MiniGame> T getMiniGame(String memberId, Class<T> tClass) throws GameException {
         if (!miniGameMap.containsKey(memberId)) throw new GameException("Game not loaded");
         MiniGame miniGame = miniGameMap.get(memberId);

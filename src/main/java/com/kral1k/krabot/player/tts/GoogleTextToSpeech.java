@@ -13,6 +13,8 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.function.Consumer;
@@ -41,7 +43,7 @@ public class GoogleTextToSpeech {
         this.voiceSelectionParams = VoiceSelectionParams.newBuilder().setLanguageCode(name.substring(0, 5)).setName(name).build();
         if (guild.getData().gTtsName.equals(name)) return;
         guild.getData().gTtsName = name;
-        guild.getData().serialize();
+        guild.saveData();
     }
 
     public TextToSpeechPlayer getPlayer() {
@@ -51,12 +53,17 @@ public class GoogleTextToSpeech {
     public void sample(String file, Consumer<Boolean> consumer) {
         textToSpeechPlayer.load(file, consumer);
     }
+    public void sample(InputStream inputStream) {
+        AudioTrackInfo info = new AudioTrackInfo("Text To Speech Sample", "google", -1, "gtts-sample", true, "unknown");
+        AudioTrack track = new Mp3AudioTrack(info, new NonSeekableInputStream(inputStream));
+        textToSpeechPlayer.play(track);
+    }
 
     public void synthesize(String text) {
         SynthesisInput synthesisInput = SynthesisInput.newBuilder().setText(text).build();
         SynthesizeSpeechResponse response = textToSpeechClient.synthesizeSpeech(synthesisInput, voiceSelectionParams, audioConfig);
 
-        AudioTrackInfo info = new AudioTrackInfo("tts", "google", -1, "tts", true, "");
+        AudioTrackInfo info = new AudioTrackInfo("Text To Speech", "google", -1, "gtts", true, "unknown");
         AudioTrack track = new Mp3AudioTrack(info, new NonSeekableInputStream(response.getAudioContent().newInput()));
         textToSpeechPlayer.play(track);
     }

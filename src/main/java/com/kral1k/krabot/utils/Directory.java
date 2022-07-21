@@ -1,7 +1,7 @@
 package com.kral1k.krabot.utils;
 
 public enum Directory {
-    ROOT("."),
+    ROOT(""),
     USERDATA("userdata"),
     GUILDS("guilds"),
     LANGUAGES("lang");

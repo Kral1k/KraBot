@@ -10,6 +10,8 @@ import com.kral1k.krabot.user.UserCache;
 import com.kral1k.krabot.user.UserData;
 import com.kral1k.krabot.utils.Directory;
 import com.kral1k.krabot.utils.GuildDirectory;
+import com.kral1k.krabot.utils.jsonconfig.JsonConfig;
+import com.kral1k.krabot.utils.jsonconfig.JsonConfigSaver;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -47,14 +49,27 @@ public class Bot {
 
 
     }
+
+    public JDA getJda() {
+        return jda;
+    }
+
+    public UserCache getUserCache() {
+        return userCache;
+    }
+
+    public GuildCache getGuildCache() {
+        return guildCache;
+    }
+
     @NotNull
     public User getUser(@NotNull net.dv8tion.jda.api.entities.User jdaUser) {
         User user = userCache.get(jdaUser.getId());
         if (user != null) user.update(jdaUser);
         else {
             Path path = getDirectory(Directory.USERDATA).resolve(jdaUser.getId() + ".json");
-            UserData userData = UserData.initialize(path);
-            user = new User(this, jdaUser, userData);
+            JsonConfigSaver<UserData> dataSaver = JsonConfig.load(UserData.class, path);
+            user = new User(this, jdaUser, dataSaver);
             userCache.put(user);
         }
         return user;
@@ -68,11 +83,8 @@ public class Bot {
     @NotNull
     public Guild getGuild(@NotNull net.dv8tion.jda.api.entities.Guild jdaGuild) {
         Guild guild = guildCache.get(jdaGuild.getId());
-        if (guild != null) guild.update(jdaGuild);
-        else {
-            guild = new Guild(this, jdaGuild);
-            guildCache.put(guild);
-        }
+        if (guild == null) guild = guildCache.load(this, jdaGuild);
+        else guild.update(jdaGuild);
         return guild;
     }
 

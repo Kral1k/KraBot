@@ -22,9 +22,9 @@ import java.util.concurrent.TimeUnit;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
-public class SplayPlayList {
+public class SplayPlayListCommand {
     public static void register(CommandDispatcher<GuildCommandInteraction> dispatcher) {
-        dispatcher.register("splplay", "splplay").addOption(new OptionData(STRING, "name", "Название трека", true)).permission(source -> {
+        dispatcher.register("splplay", "splplay").addOption(new OptionData(STRING, "name", "Название трека", true)).predicate(source -> {
             return source.hasPermission(PermissionRole.DJ);
         }).executor(interaction -> {
             String name = interaction.getOption("name").getAsString();
@@ -43,7 +43,7 @@ public class SplayPlayList {
                         YouTubeSearchResponse.Body.Item item = body.getItem(i);
                         String playlistId = item.getId().getPlaylistId();
                         String title = item.getSnippet().getTitle();
-                        videoIdButtons.add(SplayPlayListButton.create((i+1) + ". ▶", ButtonStyle.PRIMARY, new Perms(PermissionRole.DJ), playlistId));
+                        videoIdButtons.add(SplayPlayListButton.create((i+1) + " ▶", ButtonStyle.PRIMARY, new Perms(PermissionRole.DJ), playlistId));
                         stringJoiner.add("**" + (i+1) + ")** " + title);
                     }
                     ActionRow videoIdAction = ActionRow.of(videoIdButtons);

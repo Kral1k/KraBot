@@ -6,7 +6,7 @@ import com.kral1k.krabot.permission.PermissionRole;
 
 public class StopCommand {
     public static void register(CommandDispatcher<GuildCommandInteraction> dispatcher) {
-        dispatcher.register("stop", "stop").permission(source -> source.hasPermission(PermissionRole.DJ)).executor(interaction -> {
+        dispatcher.register("stop", "stop").predicate(source -> source.hasPermission(PermissionRole.DJ)).executor(interaction -> {
             interaction.getGuild().getMusicPlayer().stop();
             interaction.replayTranslatable("player.stop").setEphemeral(true).queue();
         });

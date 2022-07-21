@@ -1,5 +1,8 @@
 package com.kral1k.krabot.command;
 
+import com.kral1k.krabot.button.Source;
+import com.kral1k.krabot.utils.ExecutionException;
+import com.kral1k.krabot.utils.Executor;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
@@ -8,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public class Command<T extends CommandInteraction> {
     private final String name;
@@ -15,20 +19,20 @@ public class Command<T extends CommandInteraction> {
     private final List<OptionData> optionDataList = new ArrayList<>();
     private final Map<String, SubCommand<T>> subCommandMap = new HashMap<>();
     private final Map<String, SubCommandGroup<T>> subCommandGroupMap = new HashMap<>();
-    private CommandPermission<CommandSource> permission = source -> true;
-    private CommandExecutor<T> executor = interaction -> { throw new CommandNotFoundException(); };
+    private Predicate<Source> predicate = source -> true;
+    private Executor<T> executor = interaction -> { throw new CommandNotFoundException(); };
 
     public Command(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
-    public Command<T> permission(CommandPermission<CommandSource> permission) {
-        this.permission = permission;
+    public Command<T> predicate(Predicate<Source> predicate) {
+        this.predicate = predicate;
         return this;
     }
 
-    public Command<T> executor(CommandExecutor<T> executor) {
+    public Command<T> executor(Executor<T> executor) {
         this.executor = executor;
         return this;
     }
@@ -48,11 +52,11 @@ public class Command<T extends CommandInteraction> {
         return this;
     }
 
-    protected void execute(T interaction) throws CommandException {
-        if (!permission.accept(interaction.getSource())) throw new CommandPermissionException();
+    protected void execute(T interaction) throws ExecutionException {
+        if (!predicate.test(interaction.getSource())) throw new CommandPermissionException();
         if (interaction.getSubcommandGroup() != null) subCommandGroupMap.get(interaction.getSubcommandGroup()).execute(interaction);
         else if (interaction.getSubcommand() != null) subCommandMap.get(interaction.getSubcommand()).execute(interaction);
-        else executor.run(interaction);
+        else executor.execute(interaction);
     }
 
     protected String getName() {

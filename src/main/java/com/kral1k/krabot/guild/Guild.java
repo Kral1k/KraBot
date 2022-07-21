@@ -5,10 +5,13 @@ import com.kral1k.krabot.game.GameManager;
 import com.kral1k.krabot.guild.member.Member;
 import com.kral1k.krabot.guild.member.MemberCache;
 import com.kral1k.krabot.guild.member.MemberData;
+import com.kral1k.krabot.permission.PermissionRole;
+import com.kral1k.krabot.permission.PermissionManager;
 import com.kral1k.krabot.player.music.MusicPlayer;
 import com.kral1k.krabot.player.tts.GoogleTextToSpeech;
-import com.kral1k.krabot.utils.Directory;
 import com.kral1k.krabot.utils.GuildDirectory;
+import com.kral1k.krabot.utils.jsonconfig.JsonConfig;
+import com.kral1k.krabot.utils.jsonconfig.JsonConfigSaver;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.jetbrains.annotations.NotNull;
@@ -20,20 +23,22 @@ public class Guild {
     private final Bot bot;
     private net.dv8tion.jda.api.entities.Guild jdaGuild;
     private final Path path;
-    private final GuildData data;
+    private final JsonConfigSaver<GuildData> dataSaver;
     private final GuildProperties properties;
+    private final PermissionManager permissionManager;
     private final MemberCache memberCache = new MemberCache();
     private final MusicPlayer musicPlayer;
     private final GoogleTextToSpeech gTts;
     private final GameManager gameManager;
 
+
     public Guild(Bot bot, net.dv8tion.jda.api.entities.Guild jdaGuild) {
         this.bot = bot;
         this.jdaGuild = jdaGuild;
-        this.path = Bot.getDirectory(Directory.GUILDS).resolve(jdaGuild.getId());
-        this.getDirectory(GuildDirectory.ROOT);
-        this.data = GuildData.initialize(path.resolve("data.json"));
+        this.path = Bot.getGuildDirectory(jdaGuild.getId(), GuildDirectory.ROOT);
         this.properties = GuildProperties.load(path.resolve("guild.properties"));
+        this.dataSaver = JsonConfig.load(GuildData.class, path.resolve("data.json"));
+        this.permissionManager = new PermissionManager(this);
         this.musicPlayer = new MusicPlayer(this);
         this.gTts = GoogleTextToSpeech.create(this);
         this.gameManager = new GameManager(this);
@@ -51,12 +56,24 @@ public class Guild {
         return jdaGuild;
     }
 
-    public GuildData getData() {
-        return data;
-    }
-
     public GuildProperties getProperties() {
         return properties;
+    }
+
+    public JsonConfigSaver<GuildData> getDataSaver() {
+        return dataSaver;
+    }
+
+    public void saveData() {
+        dataSaver.save();
+    }
+
+    public GuildData getData() {
+        return dataSaver.get();
+    }
+
+    public String getPermissionRoleId(PermissionRole permissionRole) {
+        return permissionManager.getRoleId(permissionRole);
     }
 
     @NotNull
@@ -65,11 +82,15 @@ public class Guild {
         if (member != null) member.update(jdaMember);
         else {
             Path path = this.getDirectory(GuildDirectory.MEMBERDATA).resolve(jdaMember.getId() + ".json");
-            MemberData memberData = MemberData.initialize(path);
-            member = new Member(this, jdaMember, memberData);
+            JsonConfigSaver<MemberData> dataSaver = JsonConfig.load(MemberData.class, path);
+            member = new Member(this, jdaMember, dataSaver);
             memberCache.put(member);
         }
         return member;
+    }
+
+    public MemberCache getMemberCache() {
+        return memberCache;
     }
 
     @Nullable
